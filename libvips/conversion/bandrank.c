@@ -211,6 +211,16 @@ vips_bandrank_build(VipsObject *object)
 		if (n == 1) {
 			bandary->in = in;
 			bandary->n = 1;
+			bandary->out_bands = in[0]->Bands;
+
+			if (bandrank->index == -1)
+				bandrank->index = 0; // FIXME: Invalidates operation cache
+			if (bandrank->index < 0 ||
+				bandrank->index >= bandary->n) {
+				vips_error(class->nickname, "%s",
+					_("index out of range"));
+				return -1;
+			}
 
 			return vips_bandary_copy(bandary);
 		}
@@ -224,6 +234,11 @@ vips_bandrank_build(VipsObject *object)
 
 		if (bandrank->index == -1)
 			bandrank->index = bandary->n / 2; // FIXME: Invalidates operation cache
+		if (bandrank->index < 0 ||
+			bandrank->index >= bandary->n) {
+			vips_error(class->nickname, "%s", _("index out of range"));
+			return -1;
+		}
 	}
 
 	if (VIPS_OBJECT_CLASS(vips_bandrank_parent_class)->build(object))

@@ -156,6 +156,10 @@ class TestConversion:
         b = (self.mono < 2).ifthenelse(self.mono, 2)
         assert (a - b).abs().min() == 0
 
+    def test_bandrank_index_bounds(self):
+        with pytest.raises(pyvips.error.Error):
+            self.mono.bandrank([self.mono], index=4).avg()
+
     def test_copy(self):
         x = self.colour.copy(interpretation=pyvips.Interpretation.LAB)
         assert x.interpretation == pyvips.Interpretation.LAB
