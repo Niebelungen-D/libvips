@@ -1508,6 +1508,14 @@ class TestForeign:
             target = pyvips.Target.new_to_memory()
             image.matrixsave_target(target)
 
+    def test_matrix_empty_header(self):
+        filename = temp_filename(self.tempdir, ".mat")
+        with open(filename, "wb"):
+            pass
+
+        with pytest.raises(pyvips.error.Error):
+            pyvips.Image.matrixload(filename)
+
     @skip_if_no("ppmload")
     def test_ppm(self):
         self.save_load("%s.ppm", self.colour)

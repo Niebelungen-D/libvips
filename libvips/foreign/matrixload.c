@@ -169,6 +169,7 @@ parse_matrix_header(char *line,
 static int
 vips_foreign_load_matrix_header(VipsForeignLoad *load)
 {
+	VipsObjectClass *class = VIPS_OBJECT_GET_CLASS(load);
 	VipsForeignLoadMatrix *matrix = (VipsForeignLoadMatrix *) load;
 
 	char *line;
@@ -184,7 +185,10 @@ vips_foreign_load_matrix_header(VipsForeignLoad *load)
 	if (vips_source_rewind(matrix->source))
 		return -1;
 
-	line = vips_sbuf_get_line_copy(matrix->sbuf);
+	if (!(line = vips_sbuf_get_line_copy(matrix->sbuf))) {
+		vips_error(class->nickname, "%s", _("empty matrix header"));
+		return -1;
+	}
 	result = parse_matrix_header(line, &width, &height, &scale, &offset);
 	g_free(line);
 	if (result)
