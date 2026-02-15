@@ -287,6 +287,11 @@ vips_unpremultiply_build(VipsObject *object)
 	 */
 	if (!vips_object_argument_isset(object, "alpha_band"))
 		unpremultiply->alpha_band = in->Bands - 1; // FIXME: Invalidates operation cache
+	if (unpremultiply->alpha_band < 0 ||
+		unpremultiply->alpha_band >= in->Bands) {
+		vips_error(class->nickname, "%s", _("bad alpha band"));
+		return -1;
+	}
 
 	if (in->BandFmt == VIPS_FORMAT_DOUBLE)
 		conversion->out->BandFmt = VIPS_FORMAT_DOUBLE;

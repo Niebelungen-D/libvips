@@ -459,6 +459,10 @@ class TestConversion:
                 # differs ... don't require huge accuracy
                 assert abs(x - y) < 2
 
+    def test_unpremultiply_alpha_band_bounds(self):
+        with pytest.raises(pyvips.error.Error):
+            self.colour.unpremultiply(alpha_band=10).avg()
+
     def test_flip(self):
         for fmt in all_formats:
             test = self.colour.cast(fmt)
