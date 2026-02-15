@@ -131,14 +131,14 @@ vips_foreign_load_csv_build(VipsObject *object)
 		csv->sepmap[i] = 0;
 	}
 	for (p = csv->whitespace; *p; p++)
-		csv->whitemap[(int) *p] = 1;
+		csv->whitemap[(unsigned char) *p] = 1;
 	for (p = csv->separator; *p; p++)
-		csv->sepmap[(int) *p] = 1;
+		csv->sepmap[(unsigned char) *p] = 1;
 
 	/* \n must not be in the maps or we'll get very confused.
 	 */
-	csv->sepmap[(int) '\n'] = 0;
-	csv->whitemap[(int) '\n'] = 0;
+	csv->sepmap[(unsigned char) '\n'] = 0;
+	csv->whitemap[(unsigned char) '\n'] = 0;
 
 	return VIPS_OBJECT_CLASS(vips_foreign_load_csv_parent_class)
 		->build(object);

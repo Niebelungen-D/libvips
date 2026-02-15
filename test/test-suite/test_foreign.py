@@ -1501,6 +1501,15 @@ class TestForeign:
     def test_csv(self):
         self.save_load("%s.csv", self.mono)
 
+        filename = temp_filename(self.tempdir, ".csv")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write("1\n2\n")
+
+        # Non-ASCII option bytes should be handled safely.
+        im = pyvips.Image.csvload(filename, whitespace="😀")
+        assert im.width == 1
+        assert im.height == 2
+
     def test_matrix(self):
         self.save_load("%s.mat", self.mono)
 
