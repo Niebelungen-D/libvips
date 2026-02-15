@@ -326,7 +326,7 @@ static gboolean
 vips_foreign_load_matrix_file_is_a(const char *filename)
 {
 	unsigned char line[80];
-	guint64 bytes;
+	gint64 bytes;
 	int width;
 	int height;
 	double scale;

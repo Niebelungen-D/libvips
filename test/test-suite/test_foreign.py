@@ -1508,6 +1508,13 @@ class TestForeign:
             target = pyvips.Target.new_to_memory()
             image.matrixsave_target(target)
 
+    def test_matrix_sniff_read_error(self):
+        if not os.path.exists("/proc/self/mem"):
+            pytest.skip("requires /proc/self/mem")
+
+        with pytest.raises(pyvips.error.Error):
+            pyvips.Image.new_from_file("/proc/self/mem")
+
     @skip_if_no("ppmload")
     def test_ppm(self):
         self.save_load("%s.ppm", self.colour)
