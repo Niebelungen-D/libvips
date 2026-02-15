@@ -2,7 +2,6 @@ date-tbd 8.19.0
 - cpp: add orientation() to VImage [pszemus]
 - smartcrop: introduce cropping by a specific point of interest [pszemus]
 - pngload: support for EXIF data in zTXt chunks [pszemus]
-- matrixload: reject empty matrix headers [Niebelungen-D]
 
 date-tbd 8.18.1
 
@@ -16,6 +15,7 @@ date-tbd 8.18.1
 - uhdrload: expose original gainmap scale factor [lovell]
 - uhdrsave: control generated gainmap scale factor [lovell]
 - source: guard against length truncation [Niebelungen-D]
+- matrixload: reject empty matrix headers [Niebelungen-D]
 
 17/12/25 8.18.0
 
