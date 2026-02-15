@@ -147,10 +147,11 @@ vips_extract_area_build(VipsObject *object)
 
 	in = extract->in;
 
-	if (extract->left + extract->width > in->Xsize ||
-		extract->top + extract->height > in->Ysize ||
-		extract->left < 0 || extract->top < 0 ||
-		extract->width <= 0 || extract->height <= 0) {
+	if (extract->left < 0 || extract->top < 0 ||
+		extract->width <= 0 || extract->height <= 0 ||
+		extract->width > in->Xsize || extract->height > in->Ysize ||
+		extract->left > in->Xsize - extract->width ||
+		extract->top > in->Ysize - extract->height) {
 		vips_error(class->nickname, "%s", _("bad extract area"));
 		return -1;
 	}
