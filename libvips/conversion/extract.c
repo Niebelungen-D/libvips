@@ -399,7 +399,9 @@ vips_extract_band_build(VipsObject *object)
 		bandary->in = &extract->in;
 		bandary->out_bands = extract->n;
 
-		if (extract->band + extract->n > bands) {
+		if (extract->band < 0 || extract->n <= 0 ||
+			extract->n > bands ||
+			extract->band > bands - extract->n) {
 			vips_error(class->nickname,
 				"%s", _("bad extract band"));
 			return -1;

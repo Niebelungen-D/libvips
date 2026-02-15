@@ -6,6 +6,7 @@ import os
 import pytest
 import tempfile
 import shutil
+import subprocess
 
 import pyvips
 from helpers import *
@@ -278,6 +279,31 @@ class TestConversion:
 
             pixel = sub(30, 30)
             assert_almost_equal_objects(pixel, [3, 4])
+
+    def test_extract_band_overflow_bounds(self):
+        vips_binary = shutil.which("vips")
+        if vips_binary is None:
+            pytest.skip("vips binary not in PATH")
+
+        tiny = pyvips.Image.black(1, 1)
+        in_band = temp_filename(self.tempdir, ".v")
+        out_band = temp_filename(self.tempdir, ".v")
+        tiny.write_to_file(in_band)
+
+        env = dict(os.environ)
+        env["VIPS_MAX_COORD"] = "2147483647"
+
+        result = subprocess.run(
+            [vips_binary, "extract_band", in_band, out_band,
+             "2147483647", "--n", "2147483647"],
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+        assert result.returncode != 0
+        assert "bad extract band" in (result.stdout + result.stderr).lower()
 
     def test_slice(self):
         test = self.colour
